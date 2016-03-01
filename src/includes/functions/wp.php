@@ -1,0 +1,180 @@
+<?php
+/**
+ * WP Sharks™ Core RV functions.
+ *
+ * @since 160229 First documented version.
+ *
+ * @copyright WebSharks, Inc. <http://websharks-inc.com>
+ * @license GNU General Public License, version 3
+ */
+
+/**
+ * Running WP Sharks™ Core vX.x+?
+ *
+ * @return bool True if running a compatible version.
+ */
+function wp_sharks_core_rv()
+{
+    # Maybe initialize.
+
+    if (isset($GLOBALS['wp_sharks_core_rv'])) {
+        ___wp_sharks_core_rv_initialize();
+    }
+    # Current WP Sharks Core versions.
+
+    $version = isset($GLOBALS['wp_sharks_core']->version)
+        ? $GLOBALS['wp_sharks_core']->version
+        : ''; // Not available.
+
+    $min_version = $GLOBALS['___wp_sharks_core_rv']['min'];
+    $max_version = $GLOBALS['___wp_sharks_core_rv']['max'];
+
+    # Check if we have a compatible version of the WP Sharks Core.
+
+    if (!$version || version_compare($version, $min_version, '<')) {
+        return false;
+    } elseif ($max_version && version_compare($version, $max_version, '>')) {
+        return false;
+    }
+    return true; // No problems.
+}
+
+/**
+ * Creates a WP Dashboard notice regarding PHP requirements.
+ *
+ * @param string $brand_name Name of the calling theme/plugin.
+ * @param array  $args       Any additional behavioral args.
+ */
+function wp_sharks_core_rv_notice($brand_name = '', $args = array())
+{
+    # Maybe initialize.
+
+    if (isset($GLOBALS['wp_sharks_core_rv'])) {
+        ___wp_sharks_core_rv_initialize();
+    }
+    # Establish function arguments.
+
+    $default_args = array(
+        'text_domain' => '',
+        'cap'         => '',
+        'action'      => '',
+        'markup'      => '',
+    );
+    $args = array_merge($default_args, $args);
+    $args = array_intersect_key($args, $default_args);
+
+    $brand_name  = (string) $brand_name;
+    $text_domain = (string) $args['text_domain'];
+    $cap         = (string) $args['cap'];
+    $action      = (string) $args['action'];
+    $markup      = (string) $args['markup'];
+
+    # Current WP Sharks Core versions.
+
+    $version = isset($GLOBALS['wp_sharks_core']->version)
+        ? $GLOBALS['wp_sharks_core']->version
+        : ''; // Not available.
+
+    $min_version = $GLOBALS['___wp_sharks_core_rv']['min'];
+    $max_version = $GLOBALS['___wp_sharks_core_rv']['max'];
+
+    # Determine reason for dependency failure.
+
+    if (!$version) {
+        $reason = 'missing';
+    } elseif (version_compare($version, $min_version, '<')) {
+        $reason = 'needs-upgrade';
+    } elseif ($max_version && version_compare($version, $max_version, '>')) {
+        $reason = 'needs-downgrade';
+    } else {
+        $reason = 'missing';
+    }
+    # Fill-in anything that is currently empty.
+
+    $core_plugin_slug     = 'wp-sharks-core';
+    $core_plugin_basename = $core_plugin_slug.'/plugin.php';
+
+    if (!$brand_name) {
+        if (($_debug_backtrace = @debug_backtrace()) && !empty($_debug_backtrace[1]['file'])) {
+            if (($_calling_file_base_dir = basename(dirname($_debug_backtrace[1]['file'])))) {
+                $brand_name = strtolower($_calling_file_base_dir);
+                $brand_name = trim(preg_replace('/[^a-z0-9]+/i', ' ', $brand_name));
+                $brand_name = ucwords($brand_name);
+            }
+        } // unset($_debug_backtrace, $_calling_file_base_dir);
+        $brand_name = !$brand_name ? 'This Software' : $brand_name;
+    }
+    if (!$text_domain) {
+        $text_domain = strtolower($brand_name);
+        $text_domain = preg_replace('/[^a-z0-9\-]/ui', '-', $text_domain);
+        $text_domain = trim($text_domain, '-');
+    }
+    if (!$cap) {
+        $cap = 'activate_plugins';
+    }
+    if (!$action) {
+        $action = 'all_admin_notices';
+    }
+    if (!$markup) {
+        switch ($reason) {
+            case 'needs-upgrade':
+                $core_plugin_upgrade_url = wp_nonce_url(self_admin_url('update.php?action=upgrade-plugin&plugin='.urlencode($core_plugin_basename)), 'upgrade-plugin_'.$core_plugin_basename);
+                $markup                  = '<a href="https://wpsharks.com/" target="_blank" title="WP Sharks™"><img src="//cdn.websharks-inc.com/media/images/wp-sharks-icon-64.png" alt="WP Sharks™" style="width:64px; float:left; margin:0 10px 0 0;" /></a>';
+                $markup .= sprintf(__('<strong>%1$s is NOT active. It requires the WP Sharks™ Core framework plugin v%2$s (or higher).</strong><br />', $text_domain), esc_html($brand_name), esc_html($min_version));
+                $markup .= sprintf(__('&#8627; You\'re currently running an older copy of the framework plugin (v%1$ of the WP Sharks™ Core is what you have now).<br />', $text_domain), esc_html($version));
+                $markup .= sprintf(__('A simple update is necessary. Please <strong><a href="%1$s">click here to upgrade</a></strong> the WP Sharks™ Core framework plugin now.<br />', $text_domain), esc_attr($core_plugin_upgrade_url));
+                $markup .= sprintf(__('<em>To remove this message, please upgrade the WP Sharks™ Core plugin or remove %1$s from WordPress.</em>', $text_domain), esc_html($brand_name));
+                break; // Done here.
+
+            case 'needs-downgrade':
+                $core_plugin_archive_url = 'https://wordpress.org/plugins/'.urlencode($core_plugin_slug).'/developers/';
+                $markup                  = '<a href="https://wpsharks.com/" target="_blank" title="WP Sharks™"><img src="//cdn.websharks-inc.com/media/images/wp-sharks-icon-64.png" alt="WP Sharks™" style="width:64px; float:left; margin:0 10px 0 0;" /></a>';
+                $markup .= sprintf(__('<strong>%1$s is NOT active. It requires an older version of the WP Sharks™ Core framework plugin (%1$s is compatible up to WP Sharks™ Core v%2$s).</strong><br />', $text_domain), esc_html($brand_name), esc_html($max_version));
+                $markup .= sprintf(__('&#8627; You\'re currently running a newer copy of the framework plugin (v%1$ of the WP Sharks™ Core is what you have now), which will not work in v%2$s yet, unfortunately.<br />', $text_domain), esc_html($version), esc_html($brand_name));
+                $markup .= sprintf(__('A manual downgrade is necessary. Please <strong><a href="%1$s" target="_blank">click here to open the WP Sharks™ Core release archive</a></strong> and obtain an older copy.<br />', $text_domain), esc_attr($core_plugin_archive_url));
+                $markup .= sprintf(__('<em>To remove this message, please downgrade the WP Sharks™ Core plugin or remove %1$s from WordPress.</em>', $text_domain), esc_html($brand_name));
+                break; // Done here.
+
+            case 'missing':
+            default: // Also the default case.
+                $core_plugin_install_url = wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin='.urlencode($core_plugin_slug)), 'install-plugin_'.$core_plugin_slug);
+                $markup                  = '<a href="https://wpsharks.com/" target="_blank" title="WP Sharks™"><img src="//cdn.websharks-inc.com/media/images/wp-sharks-icon-64.png" alt="WP Sharks™" style="width:64px; float:left; margin:0 10px 0 0;" /></a>';
+                $markup .= sprintf(__('<strong>%1$s is NOT active. It requires the WP Sharks™ Core framework plugin to be installed first.</strong><br />', $text_domain), esc_html($brand_name));
+                $markup .= sprintf(__('A simple addition is necessary. Please <strong><a href="%1$s">click here to install</a></strong> the WP Sharks™ Core framework plugin now.<br />', $text_domain), esc_attr($core_plugin_install_url));
+                $markup .= sprintf(__('<em>To remove this message, please install the WP Sharks™ Core framework plugin or remove %1$s from WordPress.</em>', $text_domain), esc_html($brand_name));
+                break; // Done here.
+        }
+    }
+    add_action($action, create_function('', 'if(!current_user_can(\''.str_replace("'", "\\'", $cap).'\')) return;'.
+                                             'echo \''.// Wrap `$notice` inside a WordPress error.
+                                             '<div class="notice notice-error">'.
+                                                '<p>'.str_replace("'", "\\'", $markup).'</p>'.
+                                             '</div>'.
+                                             '\';'));
+}
+
+/**
+ * Initializes each instance; unsets `$GLOBALS['wp_sharks_core_rv']`.
+ *
+ * @note `$GLOBALS['wp_sharks_core_rv']` is for the API, we use a different variable internally.
+ *    The internal global is defined here: `$GLOBALS['___wp_sharks_core_rv']`.
+ */
+function ___wp_sharks_core_rv_initialize() // For internal use only.
+{
+    $GLOBALS['___wp_sharks_core_rv'] = array('min' => '', 'max' => '');
+
+    if (!empty($GLOBALS['wp_sharks_core_rv']) && is_string($GLOBALS['wp_sharks_core_rv'])) {
+        $GLOBALS['___wp_sharks_core_rv']['min'] = $GLOBALS['wp_sharks_core_rv'];
+    } elseif (!empty($GLOBALS['wp_sharks_core_rv']) && is_array($GLOBALS['wp_sharks_core_rv'])) {
+        if (!empty($GLOBALS['wp_sharks_core_rv']['min']) && is_string($GLOBALS['wp_sharks_core_rv']['min'])) {
+            $GLOBALS['___wp_sharks_core_rv']['min'] = $GLOBALS['wp_sharks_core_rv']['min'];
+        }
+        if (!empty($GLOBALS['wp_sharks_core_rv']['max']) && is_string($GLOBALS['wp_sharks_core_rv']['max'])) {
+            $GLOBALS['___wp_sharks_core_rv']['max'] = $GLOBALS['wp_sharks_core_rv']['max'];
+        }
+    }
+    if (!$GLOBALS['___wp_sharks_core_rv']['min']) {
+        $GLOBALS['___wp_sharks_core_rv']['min'] = '160229'; // Must have something.
+    }
+    unset($GLOBALS['wp_sharks_core_rv']); // Unset each time to avoid theme/plugin conflicts.
+}
