@@ -91,9 +91,6 @@ function wp_sharks_core_rv_notice($brand_name = '', $args = [])
     }
     # Fill-in anything that is currently empty.
 
-    $core_plugin_slug     = 'wp-sharks-core';
-    $core_plugin_basename = $core_plugin_slug.'/plugin.php';
-
     if (!$brand_name) {
         if (($_debug_backtrace = @debug_backtrace()) && !empty($_debug_backtrace[1]['file'])) {
             if (($_calling_file_base_dir = basename(dirname($_debug_backtrace[1]['file'])))) {
@@ -118,31 +115,31 @@ function wp_sharks_core_rv_notice($brand_name = '', $args = [])
     if (!$markup) {
         switch ($reason) {
             case 'needs-upgrade':
-                $core_plugin_upgrade_url = wp_nonce_url(self_admin_url('update.php?action=upgrade-plugin&plugin='.urlencode($core_plugin_basename).'&via=wp-sharks-core-rv'), 'upgrade-plugin_'.$core_plugin_basename);
-                $markup                  = '<a href="https://wpsharks.com/" target="_blank" title="WP Sharks™"><img src="//cdn.websharks-inc.com/media/images/wp-sharks-icon-64.png" alt="WP Sharks™" style="width:64px; float:left; margin:0 10px 0 0;" /></a>';
+                $core_plugin_upgrade_url = wp_nonce_url(self_admin_url('update.php?action=upgrade-plugin&plugin=wp-sharks-core/plugin.php&via=wp-sharks-core-rv'), 'upgrade-plugin_wp-sharks-core/plugin.php');
+                $markup                  = '<a href="https://wpsharks.com/" target="_blank" title="WP Sharks™"><img src="https://wpsharks.com/wp-content/uploads/2016/03/wp-sharks-icon-64.png" alt="WP Sharks™" style="width:64px; float:left; margin:0 10px 0 0;" /></a>';
                 $markup .= sprintf(__('<strong>%1$s is NOT active. It requires the WP Sharks™ Core framework plugin v%2$s (or higher).</strong><br />', $text_domain), esc_html($brand_name), esc_html($min_version));
                 $markup .= sprintf(__('&#8627; You\'re currently running an older copy of the framework plugin (v%1$ of the WP Sharks™ Core is what you have now).<br />', $text_domain), esc_html($version));
                 $markup .= sprintf(__('A simple update is necessary. Please <strong><a href="%1$s">click here to upgrade</a></strong> the WP Sharks™ Core framework plugin now.<br />', $text_domain), esc_attr($core_plugin_upgrade_url));
                 $markup .= sprintf(__('<em>To remove this message, please upgrade the WP Sharks™ Core plugin or remove %1$s from WordPress.</em>', $text_domain), esc_html($brand_name));
-                break; // Done here.
+                break;
 
             case 'needs-downgrade':
-                $core_plugin_archive_url = 'https://wordpress.org/plugins/'.urlencode($core_plugin_slug).'/developers/';
-                $markup                  = '<a href="https://wpsharks.com/" target="_blank" title="WP Sharks™"><img src="//cdn.websharks-inc.com/media/images/wp-sharks-icon-64.png" alt="WP Sharks™" style="width:64px; float:left; margin:0 10px 0 0;" /></a>';
+                $core_plugin_archive_url = 'https://wpsharks.com/product/core/release-archive/';
+                $markup                  = '<a href="https://wpsharks.com/" target="_blank" title="WP Sharks™"><img src="https://wpsharks.com/wp-content/uploads/2016/03/wp-sharks-icon-64.png" alt="WP Sharks™" style="width:64px; float:left; margin:0 10px 0 0;" /></a>';
                 $markup .= sprintf(__('<strong>%1$s is NOT active. It requires an older version of the WP Sharks™ Core framework plugin (%1$s is compatible up to WP Sharks™ Core v%2$s).</strong><br />', $text_domain), esc_html($brand_name), esc_html($max_version));
                 $markup .= sprintf(__('&#8627; You\'re currently running a newer copy of the framework plugin (v%1$ of the WP Sharks™ Core is what you have now), which will not work in v%2$s yet, unfortunately.<br />', $text_domain), esc_html($version), esc_html($brand_name));
                 $markup .= sprintf(__('A manual downgrade is necessary. Please <strong><a href="%1$s" target="_blank">click here to open the WP Sharks™ Core release archive</a></strong> and obtain an older copy.<br />', $text_domain), esc_attr($core_plugin_archive_url));
                 $markup .= sprintf(__('<em>To remove this message, please downgrade the WP Sharks™ Core plugin or remove %1$s from WordPress.</em>', $text_domain), esc_html($brand_name));
-                break; // Done here.
+                break;
 
             case 'missing':
             default: // Also the default case.
-                $core_plugin_install_url = wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin='.urlencode($core_plugin_slug).'&via=wp-sharks-core-rv'), 'install-plugin_'.$core_plugin_slug);
-                $markup                  = '<a href="https://wpsharks.com/" target="_blank" title="WP Sharks™"><img src="//cdn.websharks-inc.com/media/images/wp-sharks-icon-64.png" alt="WP Sharks™" style="width:64px; float:left; margin:0 10px 0 0;" /></a>';
+                $core_plugin_install_url = wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=wp-sharks-core&via=wp-sharks-core-rv'), 'install-plugin_wp-sharks-core');
+                $markup                  = '<a href="https://wpsharks.com/" target="_blank" title="WP Sharks™"><img src="https://wpsharks.com/wp-content/uploads/2016/03/wp-sharks-icon-64.png" alt="WP Sharks™" style="width:64px; float:left; margin:0 10px 0 0;" /></a>';
                 $markup .= sprintf(__('<strong>%1$s is NOT active. It requires the WP Sharks™ Core framework plugin to be installed first.</strong><br />', $text_domain), esc_html($brand_name));
                 $markup .= sprintf(__('A simple addition is necessary. Please <strong><a href="%1$s">click here to install</a></strong> the WP Sharks™ Core framework plugin now.<br />', $text_domain), esc_attr($core_plugin_install_url));
                 $markup .= sprintf(__('<em>To remove this message, please install the WP Sharks™ Core framework plugin or remove %1$s from WordPress.</em>', $text_domain), esc_html($brand_name));
-                break; // Done here.
+                break;
         }
     }
     add_action($action, create_function('', 'if(!current_user_can(\''.str_replace("'", "\\'", $cap).'\')) return;'.
@@ -156,11 +153,11 @@ function wp_sharks_core_rv_notice($brand_name = '', $args = [])
 /**
  * Filter WP Sharks™ Core in plugin API calls.
  *
- * @param \StdClass|array|bool $response False (by default).
- * @param string               $action   The API action that is being performed by WP core.
- * @param \StdClass            $args     Incoming arguments for the API request.
+ * @param StdClass|array|bool $response False (by default).
+ * @param string              $action   The API action that is being performed by WP core.
+ * @param StdClass            $args     Incoming arguments for the API request.
  *
- * @return \StdClass|array|bool An object|array when filtering.
+ * @return StdClass|array|bool An object|array when filtering.
  */
 function ___wp_sharks_core_plugins_api($response, $action, $args)
 {
@@ -173,30 +170,27 @@ function ___wp_sharks_core_plugins_api($response, $action, $args)
     if (empty($args->slug) || $args->slug !== 'wp-sharks-core') {
         return $response; // Not applicable.
     }
+    if (empty($_REQUEST['plugin']) || $_REQUEST['plugin'] !== 'wp-sharks-core') {
+        return $response; // Not applicable.
+    }
     if (empty($_REQUEST['via']) || $_REQUEST['via'] !== 'wp-sharks-core-rv') {
         return $response; // Not applicable.
     }
-    $response = (object) [
+    $wp_version = get_bloginfo('version');
+    $response   = (object) [
        'version' => 'master',
        'slug'    => 'wp-sharks-core',
        'name'    => 'WP Sharks™ Core',
 
        'homepage'       => 'https://wpsharks.com/',
-       'author'         => '<a href="https://wpsharks.com/">WP Sharks™</a>',
        'author_profile' => '//profiles.wordpress.org/wpsharks',
-       'contributors'   => [
-           'wpsharks' => '//profiles.wordpress.org/wpsharks',
-       ],
-       'donate_link' => 'https://wpsharks.com/donate/',
+       'author'         => '<a href="https://wpsharks.com/">WP Sharks™</a>',
+       'contributors'   => ['wpsharks' => '//profiles.wordpress.org/wpsharks'],
+       'donate_link'    => 'https://wpsharks.com/donate/',
 
        'short_description' => 'The WP Sharks Core is a WordPress plugin that serves as a framework for other plugins by the WP Sharks™ team.',
        'description'       => 'This plugin (by itself) does nothing. It merely serves as a framework for other plugins by the WP Sharks™ team; i.e., it contains code that is resused by other plugins that we develop. In other words, instead of shipping each plugin with our full framework, we provide the framework as an installable plugin. This allows you to run lots of other plugins that we offer, without the added overhead of loading our framework in each one. Instead, it is loaded just once by this core.',
-       'tags'              => [
-           'websharks',
-           'wp sharks',
-           'wordpress',
-           'framework',
-       ],
+       'tags'              => ['websharks', 'wp sharks', 'wordpress', 'framework'],
 
        'download_link' => 'https://github.com/websharks/wp-sharks-core/archive/master.zip',
        'versions'      => [
@@ -204,10 +198,10 @@ function ___wp_sharks_core_plugins_api($response, $action, $args)
            'master' => 'https://github.com/websharks/wp-sharks-core/archive/master.zip',
        ],
 
-       'requires'      => get_bloginfo('version'),
-       'tested'        => get_bloginfo('version'),
+       'requires'      => $wp_version,
+       'tested'        => $wp_version,
        'compatibility' => [
-           get_bloginfo('version') => [
+           $wp_version => [
                'master' => [100, 1, 1],
            ],
        ],
@@ -240,38 +234,36 @@ function ___wp_sharks_core_plugins_api($response, $action, $args)
 }
 
 /**
- * Filter WP Sharks™ Core in API calls.
+ * Filter `update_plugins` transient data.
  *
- * @param \StdClass|array|bool $response False (by default).
- * @param string               $action   The API action that is being performed by WP core.
- * @param \StdClass            $args     Incoming arguments for the API request.
+ * @param StdClass|bool $transient Existing transient data.
  *
- * @return \StdClass|array|bool An object|array when filtering.
+ * @return StdClass|bool Filtered transient data.
  */
-function ___wp_sharks_core_pre_site_transient_update_plugins($transient)
+function ___wp_sharks_core_rv_pre_site_transient_update_plugins($transient)
 {
     if (empty($_REQUEST['action']) || $_REQUEST['action'] !== 'upgrade-plugin') {
         return $transient; // Nothing to do here.
     }
+    if (empty($_REQUEST['plugin']) || $_REQUEST['plugin'] !== 'wp-sharks-core/plugin.php') {
+        return $response; // Not applicable.
+    }
     if (empty($_REQUEST['via']) || $_REQUEST['via'] !== 'wp-sharks-core-rv') {
         return $response; // Not applicable.
     }
-    $update_pro_version = (string) $_r[GLOBAL_NS.'_update_pro_version'];
-    $update_pro_zip     = base64_decode((string) $_r[GLOBAL_NS.'_update_pro_zip'], true);
-    // @TODO Encrypt/decrypt to avoid mod_security issues. Base64 is not enough.
-
     if (!is_object($transient)) {
         $transient = new StdClass();
     }
-    $transient->last_checked                           = time();
-    $transient->checked[plugin_basename(PLUGIN_FILE)]  = VERSION;
-    $transient->response[plugin_basename(PLUGIN_FILE)] = (object) [
+    $transient->last_checked                          = time();
+    $transient->checked['wp-sharks-core/plugin.php']  = 'master';
+    $transient->response['wp-sharks-core/plugin.php'] = (object) [
         'id'          => 0,
-        'slug'        => basename(PLUGIN_FILE, '.php'),
-        'url'         => add_query_arg(urlencode_deep(['page' => GLOBAL_NS.'-pro-updater']), self_admin_url('/admin.php')),
-        'new_version' => $update_pro_version, 'package' => $update_pro_zip,
+        'new_version' => 'master',
+        'slug'        => 'wp-sharks-core',
+        'url'         => 'https://wpsharks.com/product/core/',
+        'package'     => 'https://github.com/websharks/wp-sharks-core/archive/master.zip',
     ];
-    return $transient; // Nodified now.
+    return $transient;
 }
 
 /**
