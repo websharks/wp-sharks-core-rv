@@ -170,6 +170,9 @@ function ___wp_sharks_core_plugins_api($response, $action, $args)
     if (empty($args->slug) || $args->slug !== 'wp-sharks-core') {
         return $response; // Not applicable.
     }
+    if (empty($_REQUEST['action']) || $_REQUEST['action'] !== 'install-plugin') {
+        return $transient; // Nothing to do here.
+    }
     if (empty($_REQUEST['plugin']) || $_REQUEST['plugin'] !== 'wp-sharks-core') {
         return $response; // Not applicable.
     }
