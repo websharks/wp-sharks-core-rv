@@ -115,7 +115,7 @@ function wp_sharks_core_rv_notice($brand_name = '', $args = [])
     if (!$markup) {
         switch ($reason) {
             case 'needs-upgrade':
-                $core_plugin_upgrade_url = wp_nonce_url(self_admin_url('update.php?action=upgrade-plugin&plugin=wp-sharks-core/plugin.php&via=wp-sharks-core-rv'), 'upgrade-plugin_wp-sharks-core/plugin.php');
+                $core_plugin_upgrade_url = wp_nonce_url(self_admin_url('update.php?action=upgrade-plugin&plugin='.urlencode('wp-sharks-core/plugin.php').'&via=wp-sharks-core-rv'), 'upgrade-plugin_wp-sharks-core/plugin.php');
                 $markup                  = '<a href="https://wpsharks.com/" target="_blank" title="WP Sharks™"><img src="https://wpsharks.com/wp-content/uploads/2016/03/wp-sharks-icon-64.png" alt="WP Sharks™" style="width:64px; float:left; margin:0 10px 0 0;" /></a>';
                 $markup .= sprintf(__('<strong>%1$s is NOT active. It requires the WP Sharks™ Core framework plugin v%2$s (or higher).</strong><br />', $text_domain), esc_html($brand_name), esc_html($min_version));
                 $markup .= sprintf(__('&#8627; You\'re currently running an older copy of the framework plugin (v%1$ of the WP Sharks™ Core is what you have now).<br />', $text_domain), esc_html($version));
@@ -170,13 +170,15 @@ function ___wp_sharks_core_plugins_api($response, $action, $args)
     if (empty($args->slug) || $args->slug !== 'wp-sharks-core') {
         return $response; // Not applicable.
     }
-    if (empty($_REQUEST['action']) || $_REQUEST['action'] !== 'install-plugin') {
+    $_r = stripslashes_deep($_REQUEST); // Clean these up.
+
+    if (empty($_r['action']) || $_r['action'] !== 'install-plugin') {
         return $transient; // Nothing to do here.
     }
-    if (empty($_REQUEST['plugin']) || $_REQUEST['plugin'] !== 'wp-sharks-core') {
+    if (empty($_r['plugin']) || $_r['plugin'] !== 'wp-sharks-core') {
         return $response; // Not applicable.
     }
-    if (empty($_REQUEST['via']) || $_REQUEST['via'] !== 'wp-sharks-core-rv') {
+    if (empty($_r['via']) || $_r['via'] !== 'wp-sharks-core-rv') {
         return $response; // Not applicable.
     }
     $wp_version = get_bloginfo('version');
@@ -233,7 +235,7 @@ function ___wp_sharks_core_plugins_api($response, $action, $args)
            'faq'         => '',
            'reviews'     => '',
        ),
-   );
+    );
 }
 
 /**
@@ -245,13 +247,15 @@ function ___wp_sharks_core_plugins_api($response, $action, $args)
  */
 function ___wp_sharks_core_rv_pre_site_transient_update_plugins($transient)
 {
-    if (empty($_REQUEST['action']) || $_REQUEST['action'] !== 'upgrade-plugin') {
+    $_r = stripslashes_deep($_REQUEST); // Clean these up.
+
+    if (empty($_r['action']) || $_r['action'] !== 'upgrade-plugin') {
         return $transient; // Nothing to do here.
     }
-    if (empty($_REQUEST['plugin']) || $_REQUEST['plugin'] !== 'wp-sharks-core/plugin.php') {
+    if (empty($_r['plugin']) || $_r['plugin'] !== 'wp-sharks-core/plugin.php') {
         return $response; // Not applicable.
     }
-    if (empty($_REQUEST['via']) || $_REQUEST['via'] !== 'wp-sharks-core-rv') {
+    if (empty($_r['via']) || $_r['via'] !== 'wp-sharks-core-rv') {
         return $response; // Not applicable.
     }
     if (!is_object($transient)) {
