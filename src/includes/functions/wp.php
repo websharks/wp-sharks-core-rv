@@ -54,12 +54,12 @@ function wp_sharks_core_rv_notice($brand_name = '', $args = [])
     }
     # Establish function arguments.
 
-    $default_args = [
+    $default_args = array(
         'text_domain' => '',
         'cap'         => '',
         'action'      => '',
         'markup'      => '',
-    ];
+    );
     $args = array_merge($default_args, $args);
     $args = array_intersect_key($args, $default_args);
 
@@ -180,7 +180,7 @@ function ___wp_sharks_core_plugins_api($response, $action, $args)
         return $response; // Not applicable.
     }
     $wp_version = get_bloginfo('version');
-    $response   = (object) [
+    $response   = (object) array(
        'version' => 'master',
        'slug'    => 'wp-sharks-core',
        'name'    => 'WP Sharks™ Core',
@@ -188,52 +188,52 @@ function ___wp_sharks_core_plugins_api($response, $action, $args)
        'homepage'       => 'https://wpsharks.com/',
        'author_profile' => '//profiles.wordpress.org/wpsharks',
        'author'         => '<a href="https://wpsharks.com/">WP Sharks™</a>',
-       'contributors'   => ['wpsharks' => '//profiles.wordpress.org/wpsharks'],
+       'contributors'   => array('wpsharks' => '//profiles.wordpress.org/wpsharks'),
        'donate_link'    => 'https://wpsharks.com/donate/',
 
        'short_description' => 'The WP Sharks Core is a WordPress plugin that serves as a framework for other plugins by the WP Sharks™ team.',
        'description'       => 'This plugin (by itself) does nothing. It merely serves as a framework for other plugins by the WP Sharks™ team; i.e., it contains code that is resused by other plugins that we develop. In other words, instead of shipping each plugin with our full framework, we provide the framework as an installable plugin. This allows you to run lots of other plugins that we offer, without the added overhead of loading our framework in each one. Instead, it is loaded just once by this core.',
-       'tags'              => ['websharks', 'wp sharks', 'wordpress', 'framework'],
+       'tags'              => array('websharks', 'wp sharks', 'wordpress', 'framework'),
 
        'download_link' => 'https://github.com/websharks/wp-sharks-core/archive/master.zip',
-       'versions'      => [
+       'versions'      => array(
            'trunk'  => 'https://github.com/websharks/wp-sharks-core/archive/master.zip',
            'master' => 'https://github.com/websharks/wp-sharks-core/archive/master.zip',
-       ],
+       ),
 
        'requires'      => $wp_version,
        'tested'        => $wp_version,
-       'compatibility' => [
-           $wp_version => [
+       'compatibility' => array(
+           $wp_version => array(
                'master' => [100, 1, 1],
-           ],
-       ],
+           ),
+       ),
 
        'downloaded' > 1,
        'active_installs' => 1,
        'rating'          => 100,
        'num_ratings'     => 1,
-       'ratings'         => [
+       'ratings'         => array(
            5 => 1,
            4 => 0,
            3 => 0,
            2 => 0,
            1 => 0,
-       ],
+       ),
 
        'added'        => date('Y-m-d'),
        'last_updated' => date('Y-m-d g:ia e'),
 
        'group' => '', // Not sure what this is for yet.
 
-       'sections' => [
+       'sections' => array(
            'description' => 'This plugin (by itself) does nothing. It merely serves as a framework for other plugins by the WP Sharks™ team; i.e., it contains code that is resused by other plugins that we develop. In other words, instead of shipping each plugin with our full framework, we provide the framework as an installable plugin. This allows you to run lots of other plugins that we offer, without the added overhead of loading our framework in each one. Instead, it is loaded just once by this core.',
            'screenshots' => '',
            'changelog'   => '',
            'faq'         => '',
            'reviews'     => '',
-       ],
-   ];
+       ),
+   );
 }
 
 /**
@@ -259,13 +259,13 @@ function ___wp_sharks_core_rv_pre_site_transient_update_plugins($transient)
     }
     $transient->last_checked                          = time();
     $transient->checked['wp-sharks-core/plugin.php']  = 'master';
-    $transient->response['wp-sharks-core/plugin.php'] = (object) [
+    $transient->response['wp-sharks-core/plugin.php'] = (object) array(
         'id'          => 0,
         'new_version' => 'master',
         'slug'        => 'wp-sharks-core',
         'url'         => 'https://wpsharks.com/product/core/',
         'package'     => 'https://github.com/websharks/wp-sharks-core/archive/master.zip',
-    ];
+    );
     return $transient;
 }
 
@@ -277,7 +277,7 @@ function ___wp_sharks_core_rv_pre_site_transient_update_plugins($transient)
  */
 function ___wp_sharks_core_rv_initialize() // For internal use only.
 {
-    $GLOBALS['___wp_sharks_core_rv'] = ['min' => '', 'max' => ''];
+    $GLOBALS['___wp_sharks_core_rv'] = array('min' => '', 'max' => '');
 
     if (!empty($GLOBALS['wp_sharks_core_rv']) && is_string($GLOBALS['wp_sharks_core_rv'])) {
         $GLOBALS['___wp_sharks_core_rv']['min'] = $GLOBALS['wp_sharks_core_rv'];
