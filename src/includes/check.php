@@ -12,6 +12,8 @@ if (!defined('WPINC')) {
 }
 if (!function_exists('wp_sharks_core_rv')) {
     require_once dirname(__FILE__).'/functions/wp.php';
+    add_filter('plugins_api', '___wp_sharks_core_plugins_api', 10, 3);
+    add_filter('pre_site_transient_update_plugins', '___wp_sharks_core_pre_site_transient_update_plugins', 10, 1);
 }
 ___wp_sharks_core_rv_initialize(); // Run initilization routines.
 return wp_sharks_core_rv(); // True if running a compatible version.
