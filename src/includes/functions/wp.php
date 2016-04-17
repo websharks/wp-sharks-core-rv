@@ -207,7 +207,7 @@ function ___wp_sharks_core_plugins_api($response, $action, $args)
        'tested'        => $wp_version,
        'compatibility' => array(
            $wp_version => array(
-               'master' => [100, 1, 1],
+               'master' => array(100, 1, 1),
            ),
        ),
 
