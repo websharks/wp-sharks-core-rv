@@ -197,10 +197,10 @@ function ___wp_sharks_core_plugins_api($response, $action, $args)
        'description'       => 'This plugin (by itself) does nothing. It merely serves as a framework for other plugins by the WP Sharks™ team; i.e., it contains code that is resused by other plugins that we develop. In other words, instead of shipping each plugin with our full framework, we provide the framework as an installable plugin. This allows you to run lots of other plugins that we offer, without the added overhead of loading our framework in each one. Instead, it is loaded just once by this core.',
        'tags'              => array('websharks', 'wp sharks', 'wordpress', 'framework'),
 
-       'download_link' => 'https://github.com/websharks/wp-sharks-core/archive/master.zip',
+       'download_link' => 'http://www.websharks-inc.com/r/wp-sharks-core-latest-zip/',
        'versions'      => array(
-           'trunk'  => 'https://github.com/websharks/wp-sharks-core/archive/master.zip',
-           'master' => 'https://github.com/websharks/wp-sharks-core/archive/master.zip',
+           'trunk'  => 'http://www.websharks-inc.com/r/wp-sharks-core-latest-zip/',
+           'master' => 'http://www.websharks-inc.com/r/wp-sharks-core-latest-zip/',
        ),
 
        'requires'      => $wp_version,
@@ -268,7 +268,7 @@ function ___wp_sharks_core_rv_pre_site_transient_update_plugins($transient)
         'new_version' => 'master',
         'slug'        => 'wp-sharks-core',
         'url'         => 'https://wpsharks.com/product/core/',
-        'package'     => 'https://github.com/websharks/wp-sharks-core/archive/master.zip',
+        'package'     => 'http://www.websharks-inc.com/r/wp-sharks-core-latest-zip/',
     );
     return $transient;
 }
