@@ -151,6 +151,16 @@ function wp_sharks_core_rv_notice($brand_name = '', $args = [])
 }
 
 /**
+ * WP Sharks™ Core ZIP/package URL.
+ *
+ * @return string ZIP/package URL (redirection).
+ */
+function ___wp_sharks_core_latest_zip_url()
+{
+    return 'http://www.websharks-inc.com/r/wp-sharks-core-latest-zip/#wp-sharks-core.zip';
+}
+
+/**
  * Filter WP Sharks™ Core in plugin API calls.
  *
  * @param StdClass|array|bool $response False (by default).
@@ -181,7 +191,9 @@ function ___wp_sharks_core_plugins_api($response, $action, $args)
     if (empty($_r['via']) || $_r['via'] !== 'wp-sharks-core-rv') {
         return $response; // Not applicable.
     }
-    $wp_version = get_bloginfo('version');
+    $wp_version     = get_bloginfo('version');
+    $latest_zip_url = ___wp_sharks_core_latest_zip_url();
+
     $response   = (object) array(
        'version' => 'master',
        'slug'    => 'wp-sharks-core',
@@ -197,10 +209,11 @@ function ___wp_sharks_core_plugins_api($response, $action, $args)
        'description'       => 'This plugin (by itself) does nothing. It merely serves as a framework for other plugins by the WP Sharks™ team; i.e., it contains code that is resused by other plugins that we develop. In other words, instead of shipping each plugin with our full framework, we provide the framework as an installable plugin. This allows you to run lots of other plugins that we offer, without the added overhead of loading our framework in each one. Instead, it is loaded just once by this core.',
        'tags'              => array('websharks', 'wp sharks', 'wordpress', 'framework'),
 
-       'download_link' => 'http://www.websharks-inc.com/r/wp-sharks-core-latest-zip/',
+       'download_link' => $latest_zip_url,
+
        'versions'      => array(
-           'trunk'  => 'http://www.websharks-inc.com/r/wp-sharks-core-latest-zip/',
-           'master' => 'http://www.websharks-inc.com/r/wp-sharks-core-latest-zip/',
+           'trunk'  => $latest_zip_url,
+           'master' => $latest_zip_url,
        ),
 
        'requires'      => $wp_version,
@@ -268,7 +281,7 @@ function ___wp_sharks_core_rv_pre_site_transient_update_plugins($transient)
         'new_version' => 'master',
         'slug'        => 'wp-sharks-core',
         'url'         => 'https://wpsharks.com/product/core/',
-        'package'     => 'http://www.websharks-inc.com/r/wp-sharks-core-latest-zip/',
+        'package'     => ___wp_sharks_core_latest_zip_url(),
     );
     return $transient;
 }
