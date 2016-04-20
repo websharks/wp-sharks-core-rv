@@ -7,6 +7,8 @@
  * @copyright WebSharks, Inc. <http://websharks-inc.com>
  * @license GNU General Public License, version 3
  */
+// PHP v5.2 compatible.
+
 if (!defined('WPINC')) {
     exit('Do NOT access this file directly: '.basename(__FILE__));
 }

@@ -7,6 +7,7 @@
  * @copyright WebSharks, Inc. <http://websharks-inc.com>
  * @license GNU General Public License, version 3
  */
+// PHP v5.2 compatible.
 
 /**
  * Running WP Sharks™ Core vX.x+?
@@ -22,8 +23,8 @@ function wp_sharks_core_rv()
     }
     # Current WP Sharks Core versions.
 
-    $version = isset($GLOBALS['wp_sharks_core']->version)
-        ? $GLOBALS['wp_sharks_core']->version
+    $version = isset($GLOBALS['WebSharks\\WpSharks\\Core\\Classes\\App'])
+        ? $GLOBALS['WebSharks\\WpSharks\\Core\\Classes\\App']->version
         : ''; // Not available.
 
     $min_version = $GLOBALS['___wp_sharks_core_rv']['min'];
@@ -71,8 +72,8 @@ function wp_sharks_core_rv_notice($brand_name = '', $args = [])
 
     # Current WP Sharks Core versions.
 
-    $version = isset($GLOBALS['wp_sharks_core']->version)
-        ? $GLOBALS['wp_sharks_core']->version
+    $version = isset($GLOBALS['WebSharks\\WpSharks\\Core\\Classes\\App']->version)
+        ? $GLOBALS['WebSharks\\WpSharks\\Core\\Classes\\App']->version
         : ''; // Not available.
 
     $min_version = $GLOBALS['___wp_sharks_core_rv']['min'];
@@ -116,7 +117,7 @@ function wp_sharks_core_rv_notice($brand_name = '', $args = [])
         switch ($reason) {
             case 'needs-upgrade':
                 $core_plugin_upgrade_url = wp_nonce_url(self_admin_url('update.php?action=upgrade-plugin&plugin='.urlencode('wp-sharks-core/plugin.php').'&via=wp-sharks-core-rv'), 'upgrade-plugin_wp-sharks-core/plugin.php');
-                $markup                  = '<a href="https://wpsharks.com/" target="_blank" title="WP Sharks™"><img src="https://wpsharks.com/wp-content/uploads/2016/03/wp-sharks-icon-64.png" alt="WP Sharks™" style="width:64px; float:left; margin:0 10px 0 0;" /></a>';
+                $markup                  = '<a href="https://wpsharks.com/" target="_blank" title="WP Sharks™"><img src="https://wpsharks.com/wp-content/uploads/2016/03/wp-sharks-icon-64.png" alt="WP Sharks™" style="width:64px; float:left; margin:-5px 10px 0 0;" /></a>';
                 $markup .= sprintf(__('<strong>%1$s is NOT active. It requires the WP Sharks™ Core framework plugin v%2$s (or higher).</strong><br />', $text_domain), esc_html($brand_name), esc_html($min_version));
                 $markup .= sprintf(__('&#8627; You\'re currently running an older copy of the framework plugin (v%1$ of the WP Sharks™ Core is what you have now).<br />', $text_domain), esc_html($version));
                 $markup .= sprintf(__('A simple update is necessary. Please <strong><a href="%1$s">click here to upgrade</a></strong> the WP Sharks™ Core framework plugin now.<br />', $text_domain), esc_attr($core_plugin_upgrade_url));
@@ -125,7 +126,7 @@ function wp_sharks_core_rv_notice($brand_name = '', $args = [])
 
             case 'needs-downgrade':
                 $core_plugin_archive_url = 'https://wpsharks.com/product/core/release-archive/';
-                $markup                  = '<a href="https://wpsharks.com/" target="_blank" title="WP Sharks™"><img src="https://wpsharks.com/wp-content/uploads/2016/03/wp-sharks-icon-64.png" alt="WP Sharks™" style="width:64px; float:left; margin:0 10px 0 0;" /></a>';
+                $markup                  = '<a href="https://wpsharks.com/" target="_blank" title="WP Sharks™"><img src="https://wpsharks.com/wp-content/uploads/2016/03/wp-sharks-icon-64.png" alt="WP Sharks™" style="width:64px; float:left; margin:-5px 10px 0 0;" /></a>';
                 $markup .= sprintf(__('<strong>%1$s is NOT active. It requires an older version of the WP Sharks™ Core framework plugin (%1$s is compatible up to WP Sharks™ Core v%2$s).</strong><br />', $text_domain), esc_html($brand_name), esc_html($max_version));
                 $markup .= sprintf(__('&#8627; You\'re currently running a newer copy of the framework plugin (v%1$ of the WP Sharks™ Core is what you have now), which will not work in v%2$s yet, unfortunately.<br />', $text_domain), esc_html($version), esc_html($brand_name));
                 $markup .= sprintf(__('A manual downgrade is necessary. Please <strong><a href="%1$s" target="_blank">click here to open the WP Sharks™ Core release archive</a></strong> and obtain an older copy.<br />', $text_domain), esc_attr($core_plugin_archive_url));
@@ -135,7 +136,7 @@ function wp_sharks_core_rv_notice($brand_name = '', $args = [])
             case 'missing':
             default: // Also the default case.
                 $core_plugin_install_url = wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=wp-sharks-core&via=wp-sharks-core-rv'), 'install-plugin_wp-sharks-core');
-                $markup                  = '<a href="https://wpsharks.com/" target="_blank" title="WP Sharks™"><img src="https://wpsharks.com/wp-content/uploads/2016/03/wp-sharks-icon-64.png" alt="WP Sharks™" style="width:64px; float:left; margin:0 10px 0 0;" /></a>';
+                $markup                  = '<a href="https://wpsharks.com/" target="_blank" title="WP Sharks™"><img src="https://wpsharks.com/wp-content/uploads/2016/03/wp-sharks-icon-64.png" alt="WP Sharks™" style="width:64px; float:left; margin:-5px 10px 0 0;" /></a>';
                 $markup .= sprintf(__('<strong>%1$s is NOT active. It requires the WP Sharks™ Core framework plugin to be installed first.</strong><br />', $text_domain), esc_html($brand_name));
                 $markup .= sprintf(__('A simple addition is necessary. Please <strong><a href="%1$s">click here to install</a></strong> the WP Sharks™ Core framework plugin now.<br />', $text_domain), esc_attr($core_plugin_install_url));
                 $markup .= sprintf(__('<em>To remove this message, please install the WP Sharks™ Core framework plugin or remove %1$s from WordPress.</em>', $text_domain), esc_html($brand_name));
