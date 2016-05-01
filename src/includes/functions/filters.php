@@ -24,7 +24,7 @@
 function ___wp_sharks_core_rv_filter_plugins_api($response, $action, $args)
 {
     if ($response !== false) {
-        return $response;
+        return $response; // Filtered already.
     }
     if ($action !== 'plugin_information') {
         return $response; // Not applicable.
@@ -35,7 +35,7 @@ function ___wp_sharks_core_rv_filter_plugins_api($response, $action, $args)
     $_r = stripslashes_deep($_REQUEST); // Clean these up.
 
     if (empty($_r['action']) || $_r['action'] !== 'install-plugin') {
-        return $transient; // Nothing to do here.
+        return $response; // Nothing to do here.
     }
     if (empty($_r['action_via']) || $_r['action_via'] !== 'wp-sharks-core-rv') {
         return $response; // Not applicable.
@@ -115,16 +115,16 @@ function ___wp_sharks_core_rv_filter_plugins_api($response, $action, $args)
  */
 function ___wp_sharks_core_rv_filter_transient_update_plugins($transient)
 {
-    $_r = stripslashes_deep($_REQUEST); // Clean these up.
+    $_r = stripslashes_deep($_REQUEST);
 
     if (empty($_r['action']) || $_r['action'] !== 'upgrade-plugin') {
         return $transient; // Nothing to do here.
     }
-    if (empty($_r['plugin']) || $_r['plugin'] !== 'wp-sharks-core/plugin.php') {
-        return $response; // Not applicable.
+    if (empty($_r['action_via']) || $_r['action_via'] !== 'wp-sharks-core-rv') {
+        return $transient; // Not applicable.
     }
-    if (empty($_r['via']) || $_r['via'] !== 'wp-sharks-core-rv') {
-        return $response; // Not applicable.
+    if (empty($_r['plugin']) || $_r['plugin'] !== 'wp-sharks-core/plugin.php') {
+        return $transient; // Not applicable.
     }
     if (!is_object($transient)) {
         $transient = (object) []; // New object class.
