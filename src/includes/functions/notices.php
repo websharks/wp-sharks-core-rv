@@ -115,10 +115,14 @@ function wp_sharks_core_rv_notice($brand_name = '', $args = [])
         }
     }
     add_action($action, function () use ($cap, $markup) {
-        if (current_user_can($cap)) {
-            echo '<div class="notice notice-error">'.
-                    '<p>'.$markup.'</p>'.
-                 '</div>';
+        if (!current_user_can($cap)) {
+            return; // Not applicable.
         }
+        if (($_REQUEST['action_via'] ?? '') === 'wp-sharks-core') {
+            return; // Not during an install/update action.
+        }
+        echo '<div class="notice notice-error">'.
+                '<p>'.$markup.'</p>'.
+             '</div>';
     });
 }

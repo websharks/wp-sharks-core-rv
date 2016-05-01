@@ -43,7 +43,7 @@ function ___wp_sharks_core_rv_filter_plugins_api($response, $action, $args)
     if (empty($_r['plugin']) || $_r['plugin'] !== 'wp-sharks-core') {
         return $response; // Not applicable.
     }
-    $response = (object) [
+    return $response = (object) [
        'version' => 'master',
        'slug'    => 'wp-sharks-core',
        'name'    => 'WP Sharks Core',
@@ -138,5 +138,5 @@ function ___wp_sharks_core_rv_filter_transient_update_plugins($transient)
         'url'         => ___wp_sharks_core_rv_product_url(),
         'package'     => ___wp_sharks_core_rv_latest_zip_url(),
     ];
-    return $transient;
+    return $transient; // With update properties.
 }

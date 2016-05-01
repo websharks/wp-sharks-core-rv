@@ -15,7 +15,7 @@
  *
  * @return string Core home URL.
  */
-function ___wp_sharks_core_rv_home_url()
+function ___wp_sharks_core_rv_home_url(): string
 {
     return 'https://wpsharks.com';
 }
@@ -27,7 +27,7 @@ function ___wp_sharks_core_rv_home_url()
  *
  * @return string Core donate URL.
  */
-function ___wp_sharks_core_rv_donate_url()
+function ___wp_sharks_core_rv_donate_url(): string
 {
     return 'https://wpsharks.com/donate';
 }
@@ -39,7 +39,7 @@ function ___wp_sharks_core_rv_donate_url()
  *
  * @return string Core product URL.
  */
-function ___wp_sharks_core_rv_product_url()
+function ___wp_sharks_core_rv_product_url(): string
 {
     return 'https://wpsharks.com/product/core';
 }
@@ -51,7 +51,7 @@ function ___wp_sharks_core_rv_product_url()
  *
  * @return string Core ZIP/package URL.
  */
-function ___wp_sharks_core_rv_latest_zip_url()
+function ___wp_sharks_core_rv_latest_zip_url(): string
 {
     return 'http://www.websharks-inc.com/r/wp-sharks-core-latest-zip/#wp-sharks-core.zip';
 }
@@ -63,7 +63,7 @@ function ___wp_sharks_core_rv_latest_zip_url()
  *
  * @return string Release archive URL.
  */
-function ___wp_sharks_core_rv_release_archive_url()
+function ___wp_sharks_core_rv_release_archive_url(): string
 {
     return 'https://wpsharks.com/product/core/release-archive/';
 }
@@ -75,7 +75,7 @@ function ___wp_sharks_core_rv_release_archive_url()
  *
  * @return string Install URL.
  */
-function ___wp_sharks_core_rv_admin_install_url()
+function ___wp_sharks_core_rv_admin_install_url(): string
 {
     return wp_nonce_url(self_admin_url('update.php?action=install-plugin&action_via=wp-sharks-core-rv&plugin=wp-sharks-core'), 'install-plugin_wp-sharks-core');
 }
@@ -87,7 +87,7 @@ function ___wp_sharks_core_rv_admin_install_url()
  *
  * @return string Upgrade URL.
  */
-function ___wp_sharks_core_rv_admin_upgrade_url()
+function ___wp_sharks_core_rv_admin_upgrade_url(): string
 {
     return wp_nonce_url(self_admin_url('update.php?action=upgrade-plugin&action_via=wp-sharks-core-rv&plugin='.urlencode('wp-sharks-core/plugin.php')), 'upgrade-plugin_wp-sharks-core/plugin.php');
 }
