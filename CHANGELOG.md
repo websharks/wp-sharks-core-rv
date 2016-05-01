@@ -1,8 +1,12 @@
-## v16xxxx
+## v160501
 
 - Improving `composer.json`.
-- Ditching `->version` in favor of `::VERSION`.
+- Adding `_rv` to all function prefixes.
+- Reorganizing functions into multiple files.
+- Enhancing notices after testing each of them.
 - No longer a need to remain PHP v5.2 compatible. Bumping to PHP v7.0.4.
+- Ditching `->version` in favor of `::VERSION`.
+- Bug fix related to `isset()` against `::VERSION`.
 
 ## v160417
 

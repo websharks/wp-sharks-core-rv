@@ -2,7 +2,7 @@
   "name": "websharks/wp-sharks-core-rv",
   "homepage": "https://github.com/websharks/wp-sharks-core-rv",
   "description": "Stub for WordPress themes/plugins that require the WP Sharks™ Core.",
-  "keywords": ["websharks", "wp sharks", "wordpress"],
+  "keywords": ["websharks", "wpsharks", "wordpress"],
 
   "type": "library",
   "license": "GPL-3.0+",
@@ -30,6 +30,7 @@
     "php": ">=7.0.4"
   },
   "require-dev": {},
+
   "minimum-stability": "dev",
   "prefer-stable": true,
 
