@@ -20,9 +20,7 @@ function wp_sharks_core_rv(): bool
     if (isset($GLOBALS['wp_sharks_core_rv'])) {
         ___wp_sharks_core_rv_initialize();
     }
-    $version = isset($GLOBALS['wp_sharks_core'])
-        ? $wp_sharks_core::VERSION : '';
-
+    $version     = wp_sharks_core_rv_get_version();
     $min_version = $GLOBALS['___wp_sharks_core_rv']['min'];
     $max_version = $GLOBALS['___wp_sharks_core_rv']['max'];
 
@@ -60,4 +58,16 @@ function ___wp_sharks_core_rv_initialize()
         $GLOBALS['___wp_sharks_core_rv']['min'] = '160229'; // Must have something.
     }
     unset($GLOBALS['wp_sharks_core_rv']); // Unset each time to avoid theme/plugin conflicts.
+}
+
+/**
+ * Running WP Sharks™ Core vX.x+?
+ *
+ * @since 160501 Rewrite before launch.
+ *
+ * @return bool True if running a compatible version.
+ */
+function wp_sharks_core_rv_get_v(): bool
+{
+    return isset($GLOBALS[Core::class]) ? $GLOBALS[Core::class]::VERSION : '';
 }

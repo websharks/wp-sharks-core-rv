@@ -14,115 +14,128 @@
  * @since 160501 Rewrite before launch.
  *
  * @param string $brand_name Name of the calling theme/plugin.
- * @param array  $args       Any additional behavioral args.
  */
-function wp_sharks_core_rv_notice($brand_name = '', $args = [])
+function wp_sharks_core_rv_notice(string $brand_name)
 {
     # Maybe initialize.
 
     if (isset($GLOBALS['wp_sharks_core_rv'])) {
         ___wp_sharks_core_rv_initialize();
     }
-    # Establish function arguments.
+    # Establish the brand name.
 
-    $default_args = [
-        'text_domain' => '',
-        'cap'         => '',
-        'action'      => '',
-        'markup'      => '',
-    ];
-    $args = array_merge($default_args, $args);
-    $args = array_intersect_key($args, $default_args);
-
-    $brand_name  = (string) $brand_name;
-    $text_domain = (string) $args['text_domain'];
-    $cap         = (string) $args['cap'];
-    $action      = (string) $args['action'];
-    $markup      = (string) $args['markup'];
+    $brand_name = (string) $brand_name;
+    $brand_name = $brand_name ?: 'This Software';
 
     # Current WP Sharks Core versions.
 
-    $version = isset($GLOBALS['wp_sharks_core'])
-        ? $wp_sharks_core::VERSION : '';
-
+    $version     = wp_sharks_core_rv_get_version();
     $min_version = $GLOBALS['___wp_sharks_core_rv']['min'];
     $max_version = $GLOBALS['___wp_sharks_core_rv']['max'];
 
+    $is_installed = is_dir(WP_PLUGIN_DIR.'/wp-sharks-core');
+
     # Determine reason for dependency failure.
 
-    if (!$version) {
+    if (!$version && !$is_installed) {
         $reason = 'missing';
-    } elseif (version_compare($version, $min_version, '<')) {
+        $cap    = 'install_plugins';
+    } elseif (!$version && $is_installed) {
+        $reason = 'inactive';
+        $cap    = 'activate_plugins';
+    } elseif ($version && version_compare($version, $min_version, '<')) {
         $reason = 'needs-upgrade';
-    } elseif ($max_version && version_compare($version, $max_version, '>')) {
+        $cap    = 'update_plugins';
+    } elseif ($version && $max_version && version_compare($version, $max_version, '>')) {
         $reason = 'needs-downgrade';
-    } else {
+        $cap    = 'update_plugins';
+    } else { // Just a sane default case.
         $reason = 'missing';
+        $cap    = 'install_plugins';
     }
-    # Fill-in anything that is currently empty.
+    # Fill-in additional variables needed down below.
 
-    if (!$brand_name) {
-        if (($_debug_backtrace = @debug_backtrace()) && !empty($_debug_backtrace[1]['file'])) {
-            if (($_calling_file_base_dir = basename(dirname($_debug_backtrace[1]['file'])))) {
-                $brand_name = strtolower($_calling_file_base_dir);
-                $brand_name = trim(preg_replace('/[^a-z0-9]+/i', ' ', $brand_name));
-                $brand_name = ucwords($brand_name);
-            }
-        } // unset($_debug_backtrace, $_calling_file_base_dir);
-        $brand_name = !$brand_name ? 'This Software' : $brand_name;
+    $action          = 'all_admin_notices'; // All admin views.
+    $action_priority = 10; // Default priority.
+
+    # Establish important URLs needed below.
+
+    $core_plugin_archive_url  = ___wp_sharks_core_rv_release_archive_url();
+    $core_plugin_install_url  = ___wp_sharks_core_rv_admin_install_url();
+    $core_plugin_activate_url = ___wp_sharks_core_rv_admin_activate_url();
+    $core_plugin_upgrade_url  = ___wp_sharks_core_rv_admin_upgrade_url();
+
+    # Defined pre-styled icons needed below for markup generation.
+
+    $arrow  = '<span class="dashicons dashicons-editor-break" style="-webkit-transform:scale(-1, 1); transform:scale(-1, 1);"></span>';
+    $bubble = '<span class="dashicons dashicons-admin-plugins" style="display:inline-block; width:64px; height:64px; font-size:64px; float:left; margin:-5px 10px 0 -2px;"></span>';
+
+    # This allows hooks to alter any variable by reference.
+
+    foreach (array_keys(get_defined_vars()) as $___var_key) {
+        $___refs[$___var_key] = &$$___var_key;
+    } // This allows hooks to alter any variable by reference.
+    do_action('wp_sharks_core_rv_notice_refs_before_markup', $___refs);
+    unset($___refs, $___var_key); // Housekeeping.
+
+    # Generate markup for the WP Sharks Core dependency notice.
+
+    $markup = $bubble; // Initialize markup for notice.
+
+    switch ($reason) { // Based on reason.
+
+        case 'inactive': // Activate core dependency.
+            // This notice should be compatible w/ child sites in a network.
+            $markup .= sprintf(__('<strong>%1$s is not active.</strong> It depends on the <a href="%2$s" target="_blank" style="text-decoration:none;">WP Sharks Core</a> framework.', 'wp-sharks-core-rv'), esc_html($brand_name), esc_url($core_plugin_archive_url)).'<br />';
+            $markup .= $arrow.' '.sprintf(__('A simple activation is necessary. <strong><a href="%1$s">Click here to activate the WP Sharks Core dependency</a></strong>.', 'wp-sharks-core-rv'), esc_url($core_plugin_activate_url)).'<br />';
+            $markup .= sprintf(__('<em>To remove this message activate the framework or deactivate %1$s until you do.</em>', 'wp-sharks-core-rv'), esc_html($brand_name));
+            break; // All done here.
+
+        case 'needs-upgrade': // Upgrade to latest core.
+            $markup .= sprintf(__('<strong>%1$s is not active.</strong> It requires <a href="%2$s" target="_blank" style="text-decoration:none;">WP Sharks Core</a> v%3$s (or higher).', 'wp-sharks-core-rv'), esc_html($brand_name), esc_url($core_plugin_archive_url), esc_html($min_version)).'<br />';
+            $markup .= sprintf(__('You\'re currently running an older copy (v%1$s) of the WP Sharks Core.', 'wp-sharks-core-rv'), esc_html($version)).'<br />';
+            $markup .= $arrow.' '.sprintf(__('A simple update is necessary. <strong><a href="%1$s">Click here to upgrade the WP Sharks Core</a></strong>.', 'wp-sharks-core-rv'), esc_url($core_plugin_upgrade_url));
+            break; // All done here.
+
+        case 'needs-downgrade': // Downgrade. Requires manual intervention.
+            $markup .= sprintf(__('<strong>%1$s is not active.</strong> It requires an older version of the <a href="%2$s" target="_blank" style="text-decoration:none;">WP Sharks Core</a> framework.', 'wp-sharks-core-rv'), esc_html($brand_name), esc_url($core_plugin_archive_url)).'<br />';
+            $markup .= sprintf(__('You\'re running a newer copy (v%1$s). That will not work for %2$s, unfortunately.', 'wp-sharks-core-rv'), esc_html($version), esc_html($brand_name)).'<br />';
+            $markup .= $arrow.' '.sprintf(__('A manual downgrade is necessary. <strong><a href="%1$s" target="_blank">Click here to open the WP Sharks Core release archive</a></strong>.', 'wp-sharks-core-rv'), esc_url($core_plugin_archive_url)).'<br />';
+            $markup .= '<span style="display:inline-block; margin:0 0 0 1.75em;"></span>'.sprintf(__('%1$s is compatible up to WP Sharks Core v%2$s.', 'wp-sharks-core-rv'), esc_html($brand_name), esc_html($max_version));
+            break; // All done here.
+
+        case 'missing': // Installation of core dependency.
+        default: // Also the default case handler; i.e., anything else.
+            $markup .= sprintf(__('<strong>%1$s is not active.</strong> It depends on the <a href="%2$s" target="_blank" style="text-decoration:none;">WP Sharks Core</a> framework.', 'wp-sharks-core-rv'), esc_html($brand_name), esc_url($core_plugin_archive_url)).'<br />';
+            $markup .= $arrow.' '.sprintf(__('A simple addition is necessary. <strong><a href="%1$s">Click here to install the WP Sharks Core dependency</a></strong>.', 'wp-sharks-core-rv'), esc_url($core_plugin_install_url)).'<br />';
+            $markup .= sprintf(__('<em>To remove this message install the framework or remove %1$s from WordPress.</em>', 'wp-sharks-core-rv'), esc_html($brand_name));
+            break; // All done here.
     }
-    if (!$text_domain) {
-        $text_domain = strtolower($brand_name);
-        $text_domain = preg_replace('/[^a-z0-9\-]/i', '-', $text_domain);
-        $text_domain = trim($text_domain, '-');
-    }
-    if (!$cap) {
-        $cap = 'activate_plugins';
-    }
-    if (!$action) {
-        $action = 'all_admin_notices';
-    }
-    if (!$markup) {
-        $core_plugin_upgrade_url = ___wp_sharks_core_rv_admin_upgrade_url();
-        $core_plugin_archive_url = ___wp_sharks_core_rv_release_archive_url();
-        $core_plugin_install_url = ___wp_sharks_core_rv_admin_install_url();
+    # This allows hooks to alter any variable by reference.
 
-        $arrow  = '<span class="dashicons dashicons-editor-break" style="-webkit-transform:scale(-1, 1); transform:scale(-1, 1);"></span>';
-        $bubble = '<span class="dashicons dashicons-admin-plugins" style="display:inline-block; width:64px; height:64px; font-size:64px; float:left; margin:-5px 10px 0 -2px;"></span>';
+    foreach (array_keys(get_defined_vars()) as $___var_key) {
+        $___refs[$___var_key] = &$$___var_key;
+    } // This allows hooks to alter any variable by reference.
+    do_action('wp_sharks_core_rv_notice_refs', $___refs);
+    unset($___refs, $___var_key); // Housekeeping.
 
-        $markup = $bubble; // Initialize markup; starting with the bubble icon.
+    # Attach an action to display the notice now.
 
-        switch ($reason) {
-            case 'needs-upgrade': // Upgrade to latest core.
-                $markup .= sprintf(__('<strong>%1$s is not active.</strong> It requires <a href="%2$s" target="_blank" style="text-decoration:none;">WP Sharks Core</a> v%3$s (or higher).<br />', $text_domain), esc_html($brand_name), esc_attr($core_plugin_archive_url), esc_html($min_version));
-                $markup .= sprintf(__('You\'re currently running an older copy (v%1$s) of the WP Sharks Core.<br />', $text_domain), esc_html($version));
-                $markup .= $arrow.' '.sprintf(__('A simple update is necessary. <strong><a href="%1$s">Click here to upgrade the WP Sharks Core</a></strong>.<br />', $text_domain), esc_attr($core_plugin_upgrade_url));
-                break; // All done here.
-
-            case 'needs-downgrade': // Downgrade. Requires manual intervention.
-                $markup .= sprintf(__('<strong>%1$s is not active.</strong> It requires an older version of the <a href="%2$s" target="_blank" style="text-decoration:none;">WP Sharks Core</a> framework.<br />', $text_domain), esc_html($brand_name), esc_attr($core_plugin_archive_url));
-                $markup .= sprintf(__('You\'re running a newer copy (v%1$s). That will not work for %2$s, unfortunately.<br />', $text_domain), esc_html($version), esc_html($brand_name));
-                $markup .= $arrow.' '.sprintf(__('A manual downgrade is necessary. <strong><a href="%1$s" target="_blank">Click here to open the WP Sharks Core release archive</a></strong>.<br />', $text_domain), esc_attr($core_plugin_archive_url));
-                $markup .= '<span style="display:inline-block; margin:0 0 0 1.75em;"></span>'.sprintf(__('%1$s is compatible up to WP Sharks Core v%2$s.<br />', $text_domain), esc_html($brand_name), esc_html($max_version));
-                break; // All done here.
-
-            case 'missing': // Installation of core dependency.
-            default: // Also the default case handler; i.e., anything else.
-                $markup .= sprintf(__('<strong>%1$s is not active yet.</strong> It depends on the <a href="%2$s" target="_blank" style="text-decoration:none;">WP Sharks Core</a> framework.<br />', $text_domain), esc_html($brand_name), esc_attr($core_plugin_archive_url));
-                $markup .= $arrow.' '.sprintf(__('A simple addition is necessary. <strong><a href="%1$s">Click here to install the WP Sharks Core dependency</a></strong>.<br />', $text_domain), esc_attr($core_plugin_install_url));
-                $markup .= sprintf(__('<em>To remove this message install the framework or remove %1$s from WordPress.</em>', $text_domain), esc_html($brand_name));
-                break; // All done here.
-        }
-    }
     add_action($action, function () use ($cap, $markup) {
+        global $pagenow; // Needed below.
+
         if (!current_user_can($cap)) {
             return; // Not applicable.
         }
-        if (($_REQUEST['action_via'] ?? '') === 'wp-sharks-core') {
-            return; // Not during an install/update action.
+        if (in_array($pagenow, ['plugins.php', 'themes.php', 'update.php'], true)
+            && ($_REQUEST['action_via'] ?? '') === 'wp-sharks-core-rv') {
+            return; // Not during a plugin install/activate/update action.
         }
-        echo '<div class="notice notice-error">'.
+        if (!apply_filters('wp_sharks_core_rv_notice_display', true, get_defined_vars())) {
+            return; // Disabled by a filter.
+        }
+        echo '<div class="notice notice-warning">'.
                 '<p>'.$markup.'</p>'.
              '</div>';
-    });
+    }, $action_priority); // Priority of the action hook can be filtered above.
 }
