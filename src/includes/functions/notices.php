@@ -29,7 +29,7 @@ function wp_sharks_core_rv_notice(string $brand_name)
 
     # Current WP Sharks Core versions.
 
-    $version     = wp_sharks_core_rv_get_version();
+    $version     = ___wp_sharks_core_rv_get_version();
     $min_version = $GLOBALS['___wp_sharks_core_rv']['min'];
     $max_version = $GLOBALS['___wp_sharks_core_rv']['max'];
 

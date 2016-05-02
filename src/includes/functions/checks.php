@@ -20,7 +20,7 @@ function wp_sharks_core_rv(): bool
     if (isset($GLOBALS['wp_sharks_core_rv'])) {
         ___wp_sharks_core_rv_initialize();
     }
-    $version     = wp_sharks_core_rv_get_version();
+    $version     = ___wp_sharks_core_rv_get_version();
     $min_version = $GLOBALS['___wp_sharks_core_rv']['min'];
     $max_version = $GLOBALS['___wp_sharks_core_rv']['max'];
 

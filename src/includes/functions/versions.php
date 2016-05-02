@@ -16,7 +16,7 @@ use WebSharks\WpSharks\Core\Classes\App as Core;
  *
  * @return string Installed core version.
  */
-function wp_sharks_core_rv_get_version(): string
+function ___wp_sharks_core_rv_get_version(): string
 {
     return isset($GLOBALS[Core::class]) ? $GLOBALS[Core::class]::VERSION : '';
 }
