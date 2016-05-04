@@ -24,9 +24,9 @@ function wp_sharks_core_rv(): bool
     $min_version = $GLOBALS['___wp_sharks_core_rv']['min'];
     $max_version = $GLOBALS['___wp_sharks_core_rv']['max'];
 
-    if (!$version || version_compare($version, $min_version, '<')) {
+    if ($min_version && (!$version || version_compare($version, $min_version, '<'))) {
         return false;
-    } elseif ($max_version && version_compare($version, $max_version, '>')) {
+    } elseif ($max_version && $version && version_compare($version, $max_version, '>')) {
         return false;
     }
     return true;
@@ -44,18 +44,20 @@ function ___wp_sharks_core_rv_initialize()
 {
     $GLOBALS['___wp_sharks_core_rv'] = ['min' => '', 'max' => ''];
 
-    if (!empty($GLOBALS['wp_sharks_core_rv']) && is_string($GLOBALS['wp_sharks_core_rv'])) {
-        $GLOBALS['___wp_sharks_core_rv']['min'] = $GLOBALS['wp_sharks_core_rv'];
-    } elseif (!empty($GLOBALS['wp_sharks_core_rv']) && is_array($GLOBALS['wp_sharks_core_rv'])) {
-        if (!empty($GLOBALS['wp_sharks_core_rv']['min']) && is_string($GLOBALS['wp_sharks_core_rv']['min'])) {
-            $GLOBALS['___wp_sharks_core_rv']['min'] = $GLOBALS['wp_sharks_core_rv']['min'];
+    if (!empty($GLOBALS['wp_sharks_core_rv'])) {
+        if (is_string($GLOBALS['wp_sharks_core_rv'])) {
+            $GLOBALS['___wp_sharks_core_rv']['min'] = $GLOBALS['wp_sharks_core_rv'];
+        } elseif (is_array($GLOBALS['wp_sharks_core_rv'])) {
+            if (!empty($GLOBALS['wp_sharks_core_rv']['min'])) {
+                $GLOBALS['___wp_sharks_core_rv']['min'] = (string) $GLOBALS['wp_sharks_core_rv']['min'];
+            }
+            if (!empty($GLOBALS['wp_sharks_core_rv']['max'])) {
+                $GLOBALS['___wp_sharks_core_rv']['max'] = (string) $GLOBALS['wp_sharks_core_rv']['max'];
+            }
         }
-        if (!empty($GLOBALS['wp_sharks_core_rv']['max']) && is_string($GLOBALS['wp_sharks_core_rv']['max'])) {
-            $GLOBALS['___wp_sharks_core_rv']['max'] = $GLOBALS['wp_sharks_core_rv']['max'];
-        }
-    }
+    } // Now make sure we have a minimum.
     if (!$GLOBALS['___wp_sharks_core_rv']['min']) {
-        $GLOBALS['___wp_sharks_core_rv']['min'] = '160229'; // Must have something.
+        $GLOBALS['___wp_sharks_core_rv']['min'] = '1';
     }
     unset($GLOBALS['wp_sharks_core_rv']); // Unset each time to avoid theme/plugin conflicts.
 }

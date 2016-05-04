@@ -1,3 +1,9 @@
+## v160503
+
+- Enhancing display of notices.
+
+![](https://github.com/websharks/wp-sharks-core-rv/raw/000000-dev/assets/screenshot.png)
+
 ## v160501
 
 - Improving `composer.json`.
