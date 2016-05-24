@@ -1,3 +1,7 @@
+## v160525
+
+- Minor refactoring.
+
 ## v160503
 
 - Enhancing display of notices.
