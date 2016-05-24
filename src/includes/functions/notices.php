@@ -157,7 +157,7 @@ function wp_sharks_core_rv_notice(string $brand_name = '')
         if (!current_user_can($cap)) {
             return; // Not applicable.
         }
-        if (in_array($pagenow, ['plugins.php', 'themes.php', 'update.php'], true)
+        if (in_array($pagenow, ['plugins.php', 'themes.php', 'update.php', 'update-core.php'], true)
             && ($_REQUEST['action_via'] ?? '') === 'wp-sharks-core-rv') {
             return; // Not during a plugin install/activate/update action.
         }
