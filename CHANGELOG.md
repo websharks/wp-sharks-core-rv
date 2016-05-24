@@ -1,4 +1,4 @@
-## v160525
+## v160524
 
 - Minor refactoring.
 - Correct bug in download URL; i.e., remove hash.
