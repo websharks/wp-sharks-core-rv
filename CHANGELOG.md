@@ -1,6 +1,7 @@
 ## v160525
 
 - Minor refactoring.
+- Correct bug in download URL; i.e., remove hash.
 
 ## v160503
 

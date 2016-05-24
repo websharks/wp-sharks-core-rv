@@ -53,7 +53,7 @@ function ___wp_sharks_core_rv_product_url(): string
  */
 function ___wp_sharks_core_rv_latest_zip_url(): string
 {
-    return 'http://www.websharks-inc.com/r/wp-sharks-core-latest-zip/#wp-sharks-core.zip';
+    return 'http://www.websharks-inc.com/r/wp-sharks-core-latest-zip/';
 }
 
 /**
