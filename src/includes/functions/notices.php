@@ -17,9 +17,12 @@
  */
 function wp_sharks_core_rv_notice(string $brand_name = '')
 {
+    global $wp_sharks_core_rv;
+    global $___wp_sharks_core_rv;
+
     # Maybe initialize.
 
-    if (isset($GLOBALS['wp_sharks_core_rv'])) {
+    if (isset($wp_sharks_core_rv)) {
         ___wp_sharks_core_rv_initialize();
     }
     # Only in the admin area.
@@ -36,31 +39,17 @@ function wp_sharks_core_rv_notice(string $brand_name = '')
 
     # Current WP Sharks Core versions.
 
+    $min_version = $___wp_sharks_core_rv['min'];
+    $max_version = $___wp_sharks_core_rv['max'];
     $version     = ___wp_sharks_core_rv_get_version();
-    $min_version = $GLOBALS['___wp_sharks_core_rv']['min'];
-    $max_version = $GLOBALS['___wp_sharks_core_rv']['max'];
-
-    # Detect if the plugin is installed within WordPress.
-
-    $is_installed = is_dir(WP_PLUGIN_DIR.'/wp-sharks-core');
 
     # Determine reason for dependency failure.
 
-    if (!$version && !$is_installed) {
-        $reason = 'missing';
-        $cap    = 'install_plugins';
-    } elseif (!$version && $is_installed) {
-        $reason = 'inactive';
-        $cap    = 'activate_plugins';
-    } elseif ($min_version && $version && version_compare($version, $min_version, '<')) {
-        $reason = 'needs-upgrade';
-        $cap    = 'update_plugins';
-    } elseif ($max_version && $version && version_compare($version, $max_version, '>')) {
-        $reason = 'needs-downgrade';
-        $cap    = 'update_plugins';
-    } else { // Unexpected scenario here.
-        return; // Nothing to do.
-    }
+    if (!($issue = ___wp_sharks_core_rv_issue())) {
+        return; // Nothing to do here.
+    } // If there is no issue we can stop here.
+    extract($issue); // `reason`, `cap` variables.
+
     # Fill-in additional variables needed down below.
 
     $action          = 'all_admin_notices'; // All admin views.
