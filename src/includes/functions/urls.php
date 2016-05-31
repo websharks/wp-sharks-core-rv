@@ -53,7 +53,10 @@ function ___wp_sharks_core_rv_product_url(): string
  */
 function ___wp_sharks_core_rv_latest_zip_url(): string
 {
-    return 'http://www.websharks-inc.com/r/wp-sharks-core-latest-zip/';
+    if (defined('WP_DEBUG') && WP_DEBUG && defined('WP_DEBUG_EDGE') && WP_DEBUG_EDGE) {
+        return 'https://cdn.wpsharks.com/software/latest/bleeding-edge/wp-sharks-core/7b6bd20dd0e4c46.zip';
+    }
+    return 'https://cdn.wpsharks.com/software/latest/wp-sharks-core/0edbcdd1d8a97a6.zip';
 }
 
 /**
