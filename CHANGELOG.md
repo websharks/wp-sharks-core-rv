@@ -1,3 +1,8 @@
+## v160530
+
+- Updating endpoint URLs that lead to official distros.
+- Adding support for `WP_DEBUG_EDGE`, which will enable bleeding edge distros.
+
 ## v160524
 
 - Minor refactoring.
