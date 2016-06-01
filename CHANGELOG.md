@@ -1,4 +1,4 @@
-## v${[project_version]}
+## v160601.62817
 
 - Updating bleeding edge location for WPSC.
 
