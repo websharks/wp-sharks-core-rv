@@ -1,4 +1,8 @@
-## 160531.13728
+## v${[project_version]}
+
+- Updating bleeding edge location for WPSC.
+
+## v160531.13728
 
 - Adding latest websharks/phings build system.
 
