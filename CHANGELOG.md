@@ -1,4 +1,4 @@
-## $v
+## v160620.31571
 
 - Adding `___wp_sharks_core_rv_wp_profile_url()`
 - Adding `___wp_sharks_core_rv_on_upgrader_process_complete()`
