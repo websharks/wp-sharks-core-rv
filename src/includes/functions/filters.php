@@ -51,10 +51,10 @@ function ___wp_sharks_core_rv_filter_plugins_api($response, $action, $args)
        'homepage'    => ___wp_sharks_core_rv_home_url(),
        'donate_link' => ___wp_sharks_core_rv_donate_url(),
 
-       'author_profile' => 'https://profiles.wordpress.org/wpsharks',
+       'author_profile' => ___wp_sharks_core_rv_wp_profile_url(),
        'author'         => '<a href="'.esc_attr(___wp_sharks_core_rv_home_url()).'">WP Sharks</a>',
 
-       'contributors' => ['wpsharks' => 'https://profiles.wordpress.org/wpsharks'],
+       'contributors' => ['wpsharks' => ___wp_sharks_core_rv_wp_profile_url()],
 
        'short_description' => 'The WP Sharks Core is a WordPress plugin that serves as a framework for other plugins by the WP Sharks team.',
        'description'       => 'This plugin (by itself) does nothing. It merely serves as a framework for other plugins by the WP Sharks team; i.e., it contains code that is resused by other plugins that we develop. In other words, instead of shipping each plugin with our full framework we provide the framework as an installable plugin. This allows you to run lots of other plugins that we offer, without the added overhead of loading our framework in each one. Instead, it is loaded just once by this core.',

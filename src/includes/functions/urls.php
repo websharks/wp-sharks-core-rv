@@ -68,7 +68,19 @@ function ___wp_sharks_core_rv_latest_zip_url(): string
  */
 function ___wp_sharks_core_rv_release_archive_url(): string
 {
-    return 'https://wpsharks.com/product/core/release-archive/';
+    return 'https://wpsharks.com/product/core/release-archive';
+}
+
+/**
+ * WP Sharks™ Core WP profile URL.
+ *
+ * @since 160620 Adding profile URL.
+ *
+ * @return string WP profile URL.
+ */
+function ___wp_sharks_core_rv_wp_profile_url(): string
+{
+    return 'https://profiles.wordpress.org/wpsharks';
 }
 
 /**

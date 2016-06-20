@@ -14,6 +14,7 @@ if (!function_exists('wp_sharks_core_rv')) {
     require_once __DIR__.'/functions/.load.php';
     add_filter('plugins_api', '___wp_sharks_core_rv_filter_plugins_api', 10, 3);
     add_filter('pre_site_transient_update_plugins', '___wp_sharks_core_rv_filter_transient_update_plugins', 10, 1);
+    add_action('upgrader_process_complete', '___wp_sharks_core_rv_on_upgrader_process_complete');
 }
 ___wp_sharks_core_rv_initialize(); // Run initilization routines.
 return wp_sharks_core_rv(); // True if running a compatible version.

@@ -1,3 +1,10 @@
+## $v
+
+- Adding `___wp_sharks_core_rv_wp_profile_url()`
+- Adding `___wp_sharks_core_rv_on_upgrader_process_complete()`
+- Adding `___wp_sharks_core_rv_on_upgrader_process_complete__on_shutdown()`
+- Now flushing the OPcache automatically whenever a theme, plugin, or core upgrade occurs. Referencing: <https://core.trac.wordpress.org/ticket/36455>
+
 ## v160601.62817
 
 - Updating bleeding edge location for WPSC.
