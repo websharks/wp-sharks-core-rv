@@ -37,7 +37,7 @@ function ___wp_sharks_core_rv_filter_plugins_api($response, $action, $args)
     if (empty($_r['action']) || $_r['action'] !== 'install-plugin') {
         return $response; // Nothing to do here.
     }
-    if (empty($_r['action_via']) || $_r['action_via'] !== 'wp-sharks-core-rv') {
+    if (empty($_r['___action_via']) || $_r['___action_via'] !== 'wp-sharks-core-rv') {
         return $response; // Not applicable.
     }
     if (empty($_r['plugin']) || $_r['plugin'] !== 'wp-sharks-core') {
@@ -120,7 +120,7 @@ function ___wp_sharks_core_rv_filter_transient_update_plugins($transient)
     if (empty($_r['action']) || $_r['action'] !== 'upgrade-plugin') {
         return $transient; // Nothing to do here.
     }
-    if (empty($_r['action_via']) || $_r['action_via'] !== 'wp-sharks-core-rv') {
+    if (empty($_r['___action_via']) || $_r['___action_via'] !== 'wp-sharks-core-rv') {
         return $transient; // Not applicable.
     }
     if (empty($_r['plugin']) || $_r['plugin'] !== 'wp-sharks-core/plugin.php') {

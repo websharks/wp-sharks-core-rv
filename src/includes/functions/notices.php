@@ -150,7 +150,7 @@ function wp_sharks_core_rv_notice(string $brand_name = '')
             return; // Not during core update.
         }
         if (in_array($pagenow, ['plugins.php', 'themes.php', 'update.php'], true)
-            && ($_REQUEST['action_via'] ?? '') === 'wp-sharks-core-rv') {
+            && ($_REQUEST['___action_via'] ?? '') === 'wp-sharks-core-rv') {
             return; // Not during a plugin install/activate/update.
         }
         if (!apply_filters('wp_sharks_core_rv_notice_display', true, get_defined_vars())) {

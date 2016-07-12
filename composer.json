@@ -8,16 +8,16 @@
   "license": "GPL-3.0+",
 
   "authors": [{
-    "name": "websharks",
-    "homepage": "http://websharks-inc.com/",
+    "name": "wpsharks",
+    "homepage": "https://wpsharks.com",
     "role": "company"
   }, {
     "name": "jaswsinc",
-    "homepage": "http://jaswsinc.com/",
+    "homepage": "https://jaswsinc.com",
     "role": "developer"
   }, {
     "name": "raamdev",
-    "homepage": "http://raam.org/",
+    "homepage": "http://raam.org",
     "role": "developer"
   }],
 

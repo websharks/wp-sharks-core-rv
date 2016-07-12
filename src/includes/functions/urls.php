@@ -93,9 +93,9 @@ function ___wp_sharks_core_rv_wp_profile_url(): string
 function ___wp_sharks_core_rv_admin_install_url(): string
 {
     $args = [
-        'action'     => 'install-plugin',
-        'action_via' => 'wp-sharks-core-rv',
-        'plugin'     => 'wp-sharks-core',
+        'action'        => 'install-plugin',
+        '___action_via' => 'wp-sharks-core-rv',
+        'plugin'        => 'wp-sharks-core',
     ];
     $admin_url = is_multisite() ? 'network_admin_url' : 'self_admin_url';
 
@@ -116,9 +116,9 @@ function ___wp_sharks_core_rv_admin_install_url(): string
 function ___wp_sharks_core_rv_admin_activate_url(): string
 {
     $args = [
-        'action'     => 'activate',
-        'action_via' => 'wp-sharks-core-rv',
-        'plugin'     => 'wp-sharks-core/plugin.php',
+        'action'        => 'activate',
+        '___action_via' => 'wp-sharks-core-rv',
+        'plugin'        => 'wp-sharks-core/plugin.php',
     ];
     // Activation always uses `self_admin_url()`.
 
@@ -139,9 +139,9 @@ function ___wp_sharks_core_rv_admin_activate_url(): string
 function ___wp_sharks_core_rv_admin_upgrade_url(): string
 {
     $args = [
-        'action'     => 'upgrade-plugin',
-        'action_via' => 'wp-sharks-core-rv',
-        'plugin'     => 'wp-sharks-core/plugin.php',
+        'action'        => 'upgrade-plugin',
+        '___action_via' => 'wp-sharks-core-rv',
+        'plugin'        => 'wp-sharks-core/plugin.php',
     ];
     $admin_url = is_multisite() ? 'network_admin_url' : 'self_admin_url';
 
