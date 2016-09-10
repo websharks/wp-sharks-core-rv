@@ -1,4 +1,4 @@
-## $v
+## v160910.71018
 
 - Simplifying `wp_sharks_core_rv()`.
 - Refactored `wp_sharks_core_rv_notice()`.
