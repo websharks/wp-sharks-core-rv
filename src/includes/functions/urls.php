@@ -41,7 +41,7 @@ function ___wp_sharks_core_rv_donate_url(): string
  */
 function ___wp_sharks_core_rv_product_url(): string
 {
-    return 'https://wpsharks.com/product/core';
+    return 'https://wpsharks.com/product/wp-sharks-core';
 }
 
 /**
@@ -68,7 +68,7 @@ function ___wp_sharks_core_rv_latest_zip_url(): string
  */
 function ___wp_sharks_core_rv_release_archive_url(): string
 {
-    return 'https://wpsharks.com/product/core/release-archive';
+    return 'https://wpsharks.com/product/wp-sharks-core/release-archive';
 }
 
 /**

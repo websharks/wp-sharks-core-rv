@@ -1,3 +1,21 @@
+## $v
+
+- Simplifying `wp_sharks_core_rv()`.
+- Refactored `wp_sharks_core_rv_notice()`.
+- Refactored `___wp_sharks_core_rv_issue()`.
+- Refactored `___wp_sharks_core_rv_notice_brand_name()`.
+- Adding new function `___wp_sharks_core_rv_get_wp_version()`.
+- Updating location returned by `___wp_sharks_core_rv_product_url()`.
+- Updating location returned by `___wp_sharks_core_rv_release_archive_url()`.
+- Changing from filter `pre_site_transient_update_plugins` to `site_transient_update_plugins` for better compatibility w/ ManageWP and IWP.
+- Bug fix. The previous release was calling `___wp_sharks_core_rv_admin_install_url()` too early in some cases, resulting in a 'doing it wrong' notice in WordPress core whenever bbPress was installed. This was due to `wp_nonce_url()` being used by `___wp_sharks_core_rv_admin_install_url()`, which relies on the current user. Fixed in this release.
+- `___wp_sharks_core_rv_filter_transient_update_plugins()` now returns a `tested` array key as well.
+- `___wp_sharks_core_rv_filter_transient_update_plugins()` now returns a `plugin` array key as well.
+- Enhancing UTF-8 support in brand name detection.
+- Removing filter: `wp_sharks_core_rv_notice_refs_before_markup`.
+- Removing filter: `wp_sharks_core_rv_notice_refs`.
+- New filter: `wp_sharks_core_rv_notice_markup`.
+
 ## v160712.43338
 
 - Changing query arg `action_via` to `___action_via`.

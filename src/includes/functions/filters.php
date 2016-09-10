@@ -25,26 +25,22 @@ function ___wp_sharks_core_rv_filter_plugins_api($response, $action, $args)
 {
     if ($response !== false) {
         return $response; // Filtered already.
-    }
-    if ($action !== 'plugin_information') {
+    } elseif ($action !== 'plugin_information') {
         return $response; // Not applicable.
-    }
-    if (empty($args->slug) || $args->slug !== 'wp-sharks-core') {
+    } elseif (empty($args->slug) || $args->slug !== 'wp-sharks-core') {
         return $response; // Not applicable.
     }
     $_r = stripslashes_deep($_REQUEST); // Clean these up.
 
     if (empty($_r['action']) || $_r['action'] !== 'install-plugin') {
         return $response; // Nothing to do here.
-    }
-    if (empty($_r['___action_via']) || $_r['___action_via'] !== 'wp-sharks-core-rv') {
+    } elseif (empty($_r['___action_via']) || $_r['___action_via'] !== 'wp-sharks-core-rv') {
         return $response; // Not applicable.
-    }
-    if (empty($_r['plugin']) || $_r['plugin'] !== 'wp-sharks-core') {
+    } elseif (empty($_r['plugin']) || $_r['plugin'] !== 'wp-sharks-core') {
         return $response; // Not applicable.
     }
     return $response = (object) [
-       'version' => 'master',
+       'version' => 'latest',
        'slug'    => 'wp-sharks-core',
        'name'    => 'WP Sharks Core',
 
@@ -63,19 +59,18 @@ function ___wp_sharks_core_rv_filter_plugins_api($response, $action, $args)
        'download_link' => ___wp_sharks_core_rv_latest_zip_url(),
 
        'versions' => [
-           'trunk'  => ___wp_sharks_core_rv_latest_zip_url(),
-           'master' => ___wp_sharks_core_rv_latest_zip_url(),
+           'latest' => ___wp_sharks_core_rv_latest_zip_url(),
        ],
 
-       'requires'      => get_bloginfo('version'),
-       'tested'        => get_bloginfo('version'),
+       'requires'      => ___wp_sharks_core_rv_get_wp_version(),
+       'tested'        => ___wp_sharks_core_rv_get_wp_version(),
        'compatibility' => [
-           get_bloginfo('version') => [
-               'master' => [100, 1, 1],
+           ___wp_sharks_core_rv_get_wp_version() => [
+               'latest' => [100, 1, 1],
            ],
        ],
 
-       'downloaded' > 1,
+       'downloaded'      => 1,
        'active_installs' => 1,
        'rating'          => 100,
        'num_ratings'     => 1,
@@ -109,34 +104,35 @@ function ___wp_sharks_core_rv_filter_plugins_api($response, $action, $args)
  *
  * @since 160501 Rewrite before launch.
  *
- * @param StdClass|bool $transient Existing transient data.
+ * @param \StdClass|mixed $report Report details.
  *
- * @return StdClass|bool Filtered transient data.
+ * @return \StdClass|mixed Report details.
  */
-function ___wp_sharks_core_rv_filter_transient_update_plugins($transient)
+function ___wp_sharks_core_rv_filter_transient_update_plugins($report)
 {
     $_r = stripslashes_deep($_REQUEST);
 
     if (empty($_r['action']) || $_r['action'] !== 'upgrade-plugin') {
-        return $transient; // Nothing to do here.
+        return $report; // Nothing to do here.
+    } elseif (empty($_r['___action_via']) || $_r['___action_via'] !== 'wp-sharks-core-rv') {
+        return $report; // Not applicable.
+    } elseif (empty($_r['plugin']) || $_r['plugin'] !== 'wp-sharks-core/plugin.php') {
+        return $report; // Not applicable.
     }
-    if (empty($_r['___action_via']) || $_r['___action_via'] !== 'wp-sharks-core-rv') {
-        return $transient; // Not applicable.
+    if (!is_object($report)) {
+        $report = (object) []; // New object class.
     }
-    if (empty($_r['plugin']) || $_r['plugin'] !== 'wp-sharks-core/plugin.php') {
-        return $transient; // Not applicable.
+    if (!isset($report->response) || !is_array($report->response)) {
+        $report->response = []; // Force an array value.
     }
-    if (!is_object($transient)) {
-        $transient = (object) []; // New object class.
-    }
-    $transient->last_checked                          = time();
-    $transient->checked['wp-sharks-core/plugin.php']  = 'master';
-    $transient->response['wp-sharks-core/plugin.php'] = (object) [
+    $report->response['wp-sharks-core/plugin.php'] = (object) [
         'id'          => -1,
-        'new_version' => 'master',
+        'new_version' => 'latest',
         'slug'        => 'wp-sharks-core',
+        'plugin'      => 'wp-sharks-core/plugin.php',
         'url'         => ___wp_sharks_core_rv_product_url(),
         'package'     => ___wp_sharks_core_rv_latest_zip_url(),
+        'tested'      => ___wp_sharks_core_rv_get_wp_version(),
     ];
-    return $transient; // With update properties.
+    return $report; // With update properties.
 }
